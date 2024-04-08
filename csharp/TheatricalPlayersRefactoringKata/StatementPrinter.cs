@@ -70,25 +70,28 @@ namespace TheatricalPlayersRefactoringKata
             var totalAmount = 0;
             var volumeCredits = 0;
             var result = new StringBuilder();
-            // result.Append("<html>\n\t<body>");
-            result.Append(String.Format("Statement for {0}\n", invoice.Customer));
+            result.Append("<html>\n\t<body>");
+            result.Append(String.Format("<h1>Statement for {0}</h1>\n", invoice.Customer));
             CultureInfo cultureInfo = new CultureInfo("en-US");
 
             foreach(var perf in invoice.Performances) 
             {
                 var play = plays[perf.PlayID];
-                var thisAmount = 0;
-                thisAmount = getAmountPerPerformance(play, perf);
+                var amountPerPerformance = 0;
+                amountPerPerformance = getAmountPerPerformance(play, perf);
                 // add volume credits
                 volumeCredits += getCreditsPerPerformance(perf, play);
 
                 // print line for this order
-                result.Append(String.Format(cultureInfo, "  {0}: {1:C} ({2} seats)\n", play.Name, Convert.ToDecimal(thisAmount / 100), perf.Audience));
-                totalAmount += thisAmount;
+                result.Append(String.Format(cultureInfo, "<tr>  <td>{0}</td> <td>{2}</td> <td>{1:C}</td> </tr>\n", play.Name, Convert.ToDecimal(amountPerPerformance / 100), perf.Audience));
+                totalAmount += amountPerPerformance;
             }
             result.Append(String.Format(cultureInfo, "Amount owed is {0:C}\n", Convert.ToDecimal(totalAmount / 100)));
             result.Append(String.Format("You earned {0} credits\n", volumeCredits));
+            result.Append("</body>\n\t</html>");
+
             return result.ToString();
         }
+        
     }
 }
